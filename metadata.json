@@ -1,0 +1,6 @@
+{
+  "name": "PARO DE BUS",
+  "description": "Consulta rutas, paradas y tarifas del cantón, guarda tus favoritas y reporta cambios de pasaje con fecha.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
