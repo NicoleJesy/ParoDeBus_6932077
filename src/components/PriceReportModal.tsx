@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BusRoute, PriceReport } from '../types/bus';
 import { formatFare } from '../utils/storage';
-import { X, DollarSign, Calendar, AlertCircle, CheckCircle2, FileText } from 'lucide-react';
+import { validarReporteNuevoPrecio } from '../utils/validation';
+import { X, DollarSign, Calendar, AlertCircle, CheckCircle2, ShieldAlert } from 'lucide-react';
 
 interface PriceReportModalProps {
   route: BusRoute | null;
@@ -62,27 +63,30 @@ export const PriceReportModal: React.FC<PriceReportModalProps> = ({
     e.preventDefault();
     setErrorMessage('');
 
-    // Validación de tarifa
-    const parsedFare = parseFloat(newFareInput.trim());
-    if (isNaN(parsedFare) || parsedFare <= 0) {
-      setErrorMessage('Por favor ingresá un monto de pasaje válido (mayor a 0).');
+    // Validación mediante la función centralizada
+    const resultado = validarReporteNuevoPrecio({
+      tarifaActual: route.currentFare,
+      tarifaIngresada: newFareInput,
+      fechaIngresada: effectiveDate,
+      notaOpcional: note,
+      simboloMoneda: route.currencySymbol,
+    });
+
+    if (!resultado.esValido) {
+      setErrorMessage(resultado.error);
       return;
     }
 
-    // Validación de fecha
-    if (!effectiveDate || !/^\d{4}-\d{2}-\d{2}$/.test(effectiveDate)) {
-      setErrorMessage('Por favor seleccioná una fecha válida para el cambio de precio.');
-      return;
-    }
+    const { datosFormateados } = resultado;
 
-    // Creación del reporte tipado
+    // Creación del reporte tipado listo para enviar
     const newReport: PriceReport = {
       id: `report-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
       routeId: route.id,
-      oldFare: route.currentFare,
-      newFare: Math.round(parsedFare), // Tarifas en colones suelen ser enteras
-      effectiveDate: effectiveDate,
-      note: note.trim() || undefined,
+      oldFare: datosFormateados.tarifaAnterior,
+      newFare: Math.round(datosFormateados.tarifaNueva),
+      effectiveDate: datosFormateados.fechaEfectiva,
+      note: datosFormateados.nota,
       createdAt: new Date().toISOString(),
     };
 
@@ -177,9 +181,12 @@ export const PriceReportModal: React.FC<PriceReportModalProps> = ({
                 className="w-full pl-9 pr-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white text-base font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
               />
             </div>
-            <p className="text-[11px] text-slate-400 mt-1">
-              Indicá el monto exacto que están cobrando o cobraron.
-            </p>
+            <div className="flex items-center justify-between text-[11px] text-slate-400 mt-1">
+              <span>Rango permitido (±50%):</span>
+              <span className="font-semibold text-amber-400/90">
+                {route.currencySymbol}{Math.round(route.currentFare * 0.5)} — {route.currencySymbol}{Math.round(route.currentFare * 1.5)}
+              </span>
+            </div>
           </div>
 
           {/* Campo 2: Fecha del cambio */}

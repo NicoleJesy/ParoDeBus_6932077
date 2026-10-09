@@ -1,13 +1,13 @@
 import { BusRoute } from '../types/bus';
 
 /**
- * Datos semilla iniciales de las rutas cantonales.
+ * Datos semilla iniciales de las rutas cantonales con referencias visuales de destino.
  * 
  * ATENCIÓN AL MODIFICAR:
  * 1. Los IDs deben ser únicos e inmutables (strings alfanuméricos estables),
  *    porque localStorage almacena las favoritas basándose en este 'id'.
  * 2. Si cambias el 'id' de una ruta aquí, los usuarios perderán sus favoritas guardadas.
- * 3. Las fechas se fijan en formato 'YYYY-MM-DD'.
+ * 3. Las imágenes de destino usan las rutas locales generadas en assets.
  */
 export const DEFAULT_ROUTES: BusRoute[] = [
   {
@@ -21,6 +21,8 @@ export const DEFAULT_ROUTES: BusRoute[] = [
     scheduleSummary: '5:00 AM - 9:30 PM (Cada 15 min)',
     frequencyMinutes: 15,
     company: 'Autotransportes del Cantón S.A.',
+    destinationImageUrl: '/src/assets/images/plaza_san_rafael_1791385814551.jpg',
+    destinationDescription: 'Parque arbolado frente a la parroquia de San Rafael, con quiosco tradicional y parada techada sobre calle pavimentada.',
     lastPriceUpdateDate: '2026-02-15',
     priceReports: [
       {
@@ -54,6 +56,8 @@ export const DEFAULT_ROUTES: BusRoute[] = [
     scheduleSummary: '4:45 AM - 10:15 PM (Cada 12 min)',
     frequencyMinutes: 12,
     company: 'Cooperativa de Transportes del Valle',
+    destinationImageUrl: '/src/assets/images/hospital_cantonal_1791385833466.jpg',
+    destinationDescription: 'Entrada principal de Consulta Externa del Hospital Cantonal, con bahía amplia de buses y aceras accesibles.',
     lastPriceUpdateDate: '2026-01-10',
     priceReports: [
       {
@@ -86,6 +90,8 @@ export const DEFAULT_ROUTES: BusRoute[] = [
     scheduleSummary: '5:30 AM - 8:45 PM (Cada 25 min)',
     frequencyMinutes: 25,
     company: 'Buses Interurbanos San Cristóbal',
+    destinationImageUrl: '/src/assets/images/santa_marta_terminal_1791385846508.jpg',
+    destinationDescription: 'Término de línea en el poblado rural de Santa Marta, rodeado de colinas verdes, casas comunitarias y calle de lastre compactada.',
     lastPriceUpdateDate: '2026-03-01',
     priceReports: [
       {
@@ -118,6 +124,8 @@ export const DEFAULT_ROUTES: BusRoute[] = [
     scheduleSummary: '5:15 AM - 9:00 PM (Cada 20 min)',
     frequencyMinutes: 20,
     company: 'Empresa Microbuses La Unión',
+    destinationImageUrl: '/src/assets/images/mercado_municipal_1791385863689.jpg',
+    destinationDescription: 'Fachada del Mercado Municipal Cantonal, zona comercial vibrante con comercio local y bahía exterior de abordaje continuo.',
     lastPriceUpdateDate: '2025-11-20',
     priceReports: [],
     stops: [
@@ -141,6 +149,8 @@ export const DEFAULT_ROUTES: BusRoute[] = [
     scheduleSummary: '6:00 AM - 7:30 PM (Cada 45 min)',
     frequencyMinutes: 45,
     company: 'Transportes Rurales del Norte',
+    destinationImageUrl: '/src/assets/images/mirador_san_pedro_1791385874054.jpg',
+    destinationDescription: 'Mirador panorámico de San Pedro de los Altos con barandales de madera rústica y vistas abiertas sobre el valle cantonal.',
     lastPriceUpdateDate: '2026-01-25',
     priceReports: [
       {

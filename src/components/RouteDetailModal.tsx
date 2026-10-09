@@ -159,6 +159,46 @@ export const RouteDetailModal: React.FC<RouteDetailModalProps> = ({
             </div>
           </div>
 
+          {/* Cómo se ve el lugar de destino */}
+          {route.destinationImageUrl && (
+            <div className="bg-slate-800/90 border border-slate-700/80 rounded-2xl overflow-hidden shadow-md">
+              <div className="px-4 pt-3.5 pb-2.5 flex items-center justify-between">
+                <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-amber-400" />
+                  ¿Cómo se ve el lugar de destino?
+                </h3>
+                <span className="text-[11px] text-amber-400/90 font-semibold">
+                  {route.destination}
+                </span>
+              </div>
+
+              <div className="relative aspect-video w-full bg-slate-950 overflow-hidden">
+                <img
+                  src={route.destinationImageUrl}
+                  alt={`Fotografía del lugar de destino: ${route.destination}`}
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-3">
+                  <span className="text-xs font-bold text-white drop-shadow">
+                    Parada final: {route.destination}
+                  </span>
+                </div>
+              </div>
+
+              {route.destinationDescription && (
+                <div className="p-3.5 bg-slate-850/80 border-t border-slate-800 text-xs">
+                  <span className="text-slate-400 text-[10px] uppercase font-bold tracking-wider block mb-1">
+                    Referencia visual para bajarse
+                  </span>
+                  <p className="text-slate-200 leading-relaxed font-medium">
+                    {route.destinationDescription}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Lista interactiva de Paradas (Función 1) */}
           <div>
             <div className="flex items-center justify-between mb-3">

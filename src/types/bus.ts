@@ -35,6 +35,8 @@ export interface BusRoute {
   frequencyMinutes: number; // Frecuencia estimada en minutos (ej: 15 min)
   company: string; // Empresa o cooperativa que opera la concesión
   stops: BusStop[];
+  destinationImageUrl?: string; // Fotografía real o referencia visual de cómo se ve el lugar de destino
+  destinationDescription?: string; // Descripción visual del destino y referencias para bajarse
   lastPriceUpdateDate: string; // Fecha del último cambio conocido (YYYY-MM-DD)
   priceReports: PriceReport[]; // Historial de reportes comunitarios
 }

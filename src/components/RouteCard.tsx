@@ -1,7 +1,7 @@
 import React from 'react';
 import { BusRoute } from '../types/bus';
 import { formatFare, formatDateSpanish } from '../utils/storage';
-import { Star, MapPin, Clock, ArrowRight, DollarSign, Calendar, ChevronRight } from 'lucide-react';
+import { Star, MapPin, ArrowRight, DollarSign, Calendar, ChevronRight, Eye } from 'lucide-react';
 
 interface RouteCardProps {
   route: BusRoute;
@@ -12,16 +12,15 @@ interface RouteCardProps {
 }
 
 /**
- * Tarjeta de ruta de bus diseñada específicamente para vista de celular.
+ * Tarjeta de ruta de bus con previsualización fotográfica del lugar de destino.
  * 
  * PUNTOS CRÍTICOS DONDE ALGUIEN SE EQUIVOCA:
  * 1. Propagación de eventos (Event Bubbling):
  *    El botón de estrella para favoritas y el botón de reportar precio están dentro
  *    de la tarjeta cliqueable. Si no se llama `e.stopPropagation()`, al tocar la estrella
  *    se abrirá también el modal de detalle de la ruta.
- * 2. Tamaños táctiles (Touch Targets):
- *    En celular los dedos son imprecisos. Los botones interactivos deben tener un área
- *    mínima de toque de 40-44px aunque el icono visual sea pequeño.
+ * 2. Carga de imágenes en móvil:
+ *    Usar `referrerPolicy="no-referrer"` y `loading="lazy"` para ahorrar datos y evitar bloqueos.
  */
 export const RouteCard: React.FC<RouteCardProps> = ({
   route,
@@ -55,7 +54,6 @@ export const RouteCard: React.FC<RouteCardProps> = ({
         <button
           type="button"
           onClick={(e) => {
-            // EVITA abrir el modal de detalles al tocar la estrella
             e.stopPropagation();
             onToggleFavorite(route.id);
           }}
@@ -78,7 +76,7 @@ export const RouteCard: React.FC<RouteCardProps> = ({
       </h2>
 
       {/* Trayecto: Origen -> Destino */}
-      <div className="flex items-center gap-2 text-xs text-slate-300 mb-3 bg-slate-900/60 p-2.5 rounded-xl border border-slate-800">
+      <div className="flex items-center gap-2 text-xs text-slate-300 mb-2.5 bg-slate-900/60 p-2.5 rounded-xl border border-slate-800">
         <div className="flex-1 truncate">
           <span className="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">
             Origen
@@ -98,7 +96,30 @@ export const RouteCard: React.FC<RouteCardProps> = ({
         </div>
       </div>
 
-      {/* Tarifa destacada y Horario */}
+      {/* Vista previa visual de cómo se ve el lugar de destino */}
+      {route.destinationImageUrl && (
+        <div className="mb-3 relative rounded-xl overflow-hidden border border-slate-700/60 bg-slate-950 group/img">
+          <img
+            src={route.destinationImageUrl}
+            alt={`Lugar de destino: ${route.destination}`}
+            referrerPolicy="no-referrer"
+            loading="lazy"
+            className="w-full h-24 sm:h-28 object-cover group-hover/img:scale-105 transition-transform duration-300 opacity-90 hover:opacity-100"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex items-end p-2.5 justify-between">
+            <span className="text-[11px] font-semibold text-slate-200 flex items-center gap-1 drop-shadow-sm truncate pr-2">
+              <MapPin className="w-3 h-3 text-amber-400 shrink-0" />
+              Destino: {route.destination}
+            </span>
+            <span className="text-[10px] bg-slate-900/90 text-amber-300 px-2 py-0.5 rounded-md font-bold shrink-0 flex items-center gap-1 border border-amber-500/30">
+              <Eye className="w-3 h-3" />
+              Ver foto
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Tarifa destacada y botón de reporte */}
       <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-700/60">
         <div>
           <span className="text-[11px] text-slate-400 block font-medium">
@@ -118,7 +139,6 @@ export const RouteCard: React.FC<RouteCardProps> = ({
         <button
           type="button"
           onClick={(e) => {
-            // EVITA disparar la selección de tarjeta
             e.stopPropagation();
             onOpenReportModal(route);
           }}
@@ -129,14 +149,14 @@ export const RouteCard: React.FC<RouteCardProps> = ({
         </button>
       </div>
 
-      {/* Pie de tarjeta: Última fecha de actualización de precio y sugerencia */}
+      {/* Pie de tarjeta: Última fecha de actualización y ver paradas */}
       <div className="mt-2.5 flex items-center justify-between text-[11px] text-slate-400">
         <span className="flex items-center gap-1">
           <Calendar className="w-3 h-3 text-slate-400" />
           Precio al: {formatDateSpanish(route.lastPriceUpdateDate)}
         </span>
         <span className="flex items-center gap-0.5 text-amber-400/90 font-medium group-hover:translate-x-0.5 transition-transform">
-          Ver paradas <ChevronRight className="w-3.5 h-3.5" />
+          Ver paradas y fotos <ChevronRight className="w-3.5 h-3.5" />
         </span>
       </div>
     </article>
